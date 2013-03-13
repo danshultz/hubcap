@@ -3,15 +3,18 @@ require 'rubygems'
 
 class Hubcap::TestVaultConfig < Test::Unit::TestCase
 
+  def setup
+    assert(!Hubcap::Vault::Config.cipher_iv)
+    assert(!Hubcap::Vault::Config.cipher_iv)
+  end
+
+
   def teardown
     Hubcap::Vault::Config.reset!
   end
 
 
   def test_global_config
-    assert(!Hubcap::Vault::Config.cipher_iv)
-    assert(!Hubcap::Vault::Config.cipher_iv)
-
     cipher_key = "256 aes key"
     cipher_iv  = "the vector"
     Hubcap::Vault::Config.configure { |config|
@@ -25,9 +28,6 @@ class Hubcap::TestVaultConfig < Test::Unit::TestCase
 
 
   def test_bundle_configs
-    assert(!Hubcap::Vault::Config.cipher_iv)
-    assert(!Hubcap::Vault::Config.cipher_iv)
-
     cipher_key = "256 aes key"
     cipher_iv  = "the vector"
     Hubcap::Vault::Config.configure { |config|
@@ -45,9 +45,6 @@ class Hubcap::TestVaultConfig < Test::Unit::TestCase
 
 
   def test_bundle_config_with_defaults
-    assert(!Hubcap::Vault::Config.cipher_iv)
-    assert(!Hubcap::Vault::Config.cipher_iv)
-
     default_cipher_key = "256 aes key"
     cipher_iv  = "the vector"
     Hubcap::Vault::Config.configure { |config|

@@ -13,14 +13,26 @@ class Hubcap::Vault::Config
 
 
     def cipher_key(name = nil)
-      (name ? config.bundles[name.to_s] : config).cipher_key
+      get_config(name).cipher_key
     end
 
 
     def cipher_iv(name = nil)
-      (name ? config.bundles[name.to_s] : config).cipher_iv
+      get_config(name).cipher_iv
     end
 
+
+    def store(name = nil)
+      get_config(name).store
+    end
+
+
+    protected
+
+
+    def get_config(name)
+      (name && name.to_s != "default") ? config.bundles[name.to_s] : config
+    end
 
     def config
       @@config ||= new
@@ -41,8 +53,7 @@ class Hubcap::Vault::Config
 
   def define_bundle(name)
     name = name.to_s
-    bundle = bundles[name] = self.class.new(name)
-    set_defaults(bundle)
+    bundle = bundles[name] ||= set_defaults(self.class.new(name))
     yield(bundle)
   end
 
@@ -65,7 +76,7 @@ class Hubcap::Vault::Config
     default_props.each { |prop|
       bundle.send("#{prop}=", send(prop))
     }
+    bundle
   end
-
 
 end

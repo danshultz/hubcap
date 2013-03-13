@@ -1,11 +1,11 @@
 # Used to store secrets that should be encrypted
 class Hubcap::Vault::Store
 
-  def initialize(bundle, config = Hubcap::Vault::Config.config)
+  attr_reader :bundle
+
+
+  def initialize(bundle = "default")
     @bundle = bundle.to_s
-    yield(config)
-    @config = config
-    @backing_store = config.store[@bundle]
   end
 
 
@@ -37,15 +37,15 @@ class Hubcap::Vault::Store
 
 
   def backing_store
-    @backing_store
+    config.store(bundle)
   end
 
 
   def cipher_data
     {
       :cipher_type => 'aes-256-cbc',
-      :cipher_key => @config.cipher_key,
-      :cipher_iv => @config.cipher_iv,
+      :cipher_key => config.cipher_key(bundle),
+      :cipher_iv => config.cipher_iv(bundle)
     }
   end
 
@@ -56,6 +56,11 @@ class Hubcap::Vault::Store
       cipher.key = cipher_data[:cipher_key]
       cipher.iv = cipher_data[:cipher_iv]
     }
+  end
+
+
+  def config
+    Hubcap::Vault::Config
   end
 
 end
