@@ -42,6 +42,7 @@ class Hubcap::Vault::Config
   def define_bundle(name)
     name = name.to_s
     bundle = bundles[name] = self.class.new(name)
+    set_defaults(bundle)
     yield(bundle)
   end
 
@@ -50,10 +51,21 @@ class Hubcap::Vault::Config
     @store ||= default_store
   end
 
+
   protected
+
 
   def default_store
     { self.name => {} }
   end
+
+
+  def set_defaults(bundle)
+    default_props = [:cipher_key, :cipher_iv, :store]
+    default_props.each { |prop|
+      bundle.send("#{prop}=", send(prop))
+    }
+  end
+
 
 end
