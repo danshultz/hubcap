@@ -25,17 +25,21 @@ class Hubcap::Vault
 
   def store(k, v)
     encrypted = data(:encrypt, v)
-    backing_store.store(k.to_s, encrypted)
+    bundle_store.store(k.to_s, encrypted)
   end
 
 
   def key?(k)
-    backing_store.key?(k.to_s)
+    bundle_store.key?(k.to_s)
   end
 
 
   def [](k)
-    data(:decrypt, backing_store[k.to_s])
+    data(:decrypt, bundle_store[k.to_s])
+  end
+
+  def save
+    config_store.save(backing_store)
   end
 
 
@@ -50,8 +54,18 @@ class Hubcap::Vault
   end
 
 
+  def bundle_store
+    @bundle_store ||= (backing_store[@bundle] = backing_store[@bundle] || {})
+  end
+
+
   def backing_store
-    config.store(bundle)
+    @backing_store ||= config_store.load
+  end
+
+
+  def config_store
+    @store ||= config.store(@bundle)
   end
 
 

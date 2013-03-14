@@ -4,12 +4,16 @@ require 'hubcap/vault'
 
 class Hubcap::TestVault < Test::Unit::TestCase
 
+  Struct.new("VaultStore", :data, :saved_data) {
+    def load; data; end
+    def save(d); self.saved_data = d; end
+  }
+
   def setup
-    @backing_store = { "prod" => {} }
     @vault = ::Hubcap::Vault.load(:prod) { |config|
       config.cipher_key = "Q6QIWe/tZBvdtT/vgWU74Tx0eDmpFh15jrz/O+bzm60="
       config.cipher_iv  = "qs2ZGxWHmqIDJNaaZgwohg=="
-      config.store = @backing_store
+      config.store = @store = Struct::VaultStore.new({})
     }
   end
 
@@ -32,7 +36,15 @@ class Hubcap::TestVault < Test::Unit::TestCase
 
   def test_stores_value_encrypted
     @vault.store(:my_value, "the secret")
-    assert_not_equal(@backing_store["prod"]["my_value"], "the secret")
+    assert_not_equal(@store.data["prod"]["my_value"], "the secret")
+  end
+
+  def test_values_are_saved
+    assert_not_equal(@store.data, @store.saved_data)
+    @vault.store(:my_value, "the secret")
+    assert_not_equal(@store.data, @store.saved_data)
+    @vault.save
+    assert_equal(@store.data, @store.saved_data)
   end
 
 end
