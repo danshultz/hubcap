@@ -34,6 +34,7 @@ class Hubcap::Vault::Config
       (name && name.to_s != "default") ? config.bundles[name.to_s] : config
     end
 
+
     def config
       @@config ||= new
     end
@@ -67,7 +68,7 @@ class Hubcap::Vault::Config
 
 
   def default_store
-    { self.name => {} }
+    Hubcap::Vault::YamlStore.new
   end
 
 

@@ -14,7 +14,7 @@ class Hubcap::TestVaultConfig < Test::Unit::TestCase
   end
 
 
-  def test_global_config
+  def test_default_config
     cipher_key = "256 aes key"
     cipher_iv  = "the vector"
     Hubcap::Vault::Config.configure { |config|
@@ -59,5 +59,12 @@ class Hubcap::TestVaultConfig < Test::Unit::TestCase
     assert_equal(Hubcap::Vault::Config.cipher_key(:prod), default_cipher_key)
     assert_equal(Hubcap::Vault::Config.cipher_iv(:prod), cipher_iv)
   end
+
+
+  def test_default_file_store
+    Hubcap::Vault::Config.configure {}
+    assert_equal(Hubcap::Vault::YamlStore, Hubcap::Vault::Config.store.class)
+  end
+
 
 end

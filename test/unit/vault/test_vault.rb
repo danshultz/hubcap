@@ -17,16 +17,19 @@ class Hubcap::TestVault < Test::Unit::TestCase
     }
   end
 
+
   def teardown
     @vault = nil
     @backing_store = nil
     Hubcap::Vault::Config.reset!
   end
 
+
   def test_store_key
     @vault.store(:my_value, "the secret")
     assert(@vault.key?(:my_value))
   end
+
 
   def test_get
     value = "the secret"
@@ -34,10 +37,12 @@ class Hubcap::TestVault < Test::Unit::TestCase
     assert_equal(@vault[:my_value], value)
   end
 
+
   def test_stores_value_encrypted
     @vault.store(:my_value, "the secret")
     assert_not_equal(@store.data["prod"]["my_value"], "the secret")
   end
+
 
   def test_values_are_saved
     assert_not_equal(@store.data, @store.saved_data)

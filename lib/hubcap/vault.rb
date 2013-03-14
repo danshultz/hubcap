@@ -1,3 +1,5 @@
+require 'openssl'
+
 class Hubcap::Vault
     
   class << self
@@ -94,3 +96,4 @@ class Hubcap::Vault
 end
 
 require 'hubcap/vault/config'
+require 'hubcap/vault/yaml_store'
