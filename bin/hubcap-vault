@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require('hubcap')
+require('hubcap/vault')
+require('hubcap/vault/generators')
+require('optparse')
+
+class Hubcap::Vault::CLI
+
+  attr_reader :params, :args
+
+
+  def initialize(argv)
+    @params, @args = parse_options(argv)
+  end
+
+
+  def run
+    if params[:bootstrap]
+      generate_bootstrap
+    end
+  end
+
+
+  def generate_bootstrap
+
+    if File.exists?(config_file)
+      puts("Config file already exists")
+    else
+      results = Hubcap::Vault::Generators.config
+      File.open(config_file, 'w+') { |file| file.write(results) }
+    end
+  end
+
+
+  def config_file
+    File.join(Dir.pwd, ".vault.rb")
+  end
+
+
+  def parse_options(argv)
+    params = {}
+    parser = OptionParser.new 
+
+    parser.on("-b", "--bundle BUNDLE") { |b| params[:bundle] = b }
+    parser.on("--bootstrap") { params[:bootstrap] = true }
+
+    args = parser.parse(argv)
+
+    [params, args]
+  end
+
+end
+
+Hubcap::Vault::CLI.new(ARGV).run
