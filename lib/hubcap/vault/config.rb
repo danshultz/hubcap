@@ -31,7 +31,7 @@ class Hubcap::Vault::Config
 
 
     def get_config(name)
-      (name && name.to_s != "default") ? config.bundles[name.to_s] : config
+      config.bundles[name.to_s] || config
     end
 
 

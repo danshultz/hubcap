@@ -24,6 +24,9 @@ class Hubcap::TestVaultConfig < Test::Unit::TestCase
 
     assert_equal(Hubcap::Vault::Config.cipher_key, cipher_key)
     assert_equal(Hubcap::Vault::Config.cipher_iv, cipher_iv)
+
+    assert_equal(Hubcap::Vault::Config.cipher_key(:prod), cipher_key)
+    assert_equal(Hubcap::Vault::Config.cipher_iv(:prod), cipher_iv)
   end
 
 
