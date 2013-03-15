@@ -4,7 +4,7 @@ class Hubcap::Vault::YamlStore
 
 
   def initialize(file_name=nil)
-    @file_name = file_name || ".vault_data"
+    @file_name = file_name || File.join(Dir.pwd, ".vault.yaml")
   end
 
 
