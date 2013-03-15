@@ -1,4 +1,4 @@
-require 'openssl'
+require('openssl')
 
 class Hubcap::Vault
     
@@ -95,5 +95,5 @@ class Hubcap::Vault
 
 end
 
-require 'hubcap/vault/config'
-require 'hubcap/vault/yaml_store'
+require('hubcap/vault/config')
+require('hubcap/vault/yaml_store')

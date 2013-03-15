@@ -1,6 +1,6 @@
-require 'test_helper'
-require 'rubygems'
-require 'hubcap/vault'
+require('test_helper')
+require('rubygems')
+require('hubcap/vault')
 
 class Hubcap::TestVault < Test::Unit::TestCase
 
@@ -8,6 +8,7 @@ class Hubcap::TestVault < Test::Unit::TestCase
     def load; data; end
     def save(d); self.saved_data = d; end
   }
+
 
   def setup
     @vault = ::Hubcap::Vault.load(:prod) { |config|
