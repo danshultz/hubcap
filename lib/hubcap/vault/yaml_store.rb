@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Hubcap::Vault::YamlStore
 
   attr_reader :file_name
@@ -9,12 +11,12 @@ class Hubcap::Vault::YamlStore
 
 
   def load
-    Yaml.load(file_name) || {}
+    YAML.load(File.open(file_name, "a+")) || {}
   end
 
   
   def save(data)
-    Yaml.dump(data, File.open(file_name, "w+"))
+    YAML.dump(data, File.open(file_name, "w+"))
   end
 
 end
