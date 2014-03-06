@@ -36,7 +36,7 @@ class Hubcap::TestGroup < Test::Unit::TestCase
 
   def test_processable_and_collectable
     x = {}
-    hub = Hubcap.hub('g1.a1') {
+    Hubcap.hub('g1.a1') {
       x[:g1] = group('g1') {
         x[:a1] = application('a1') {
           x[:s1] = server('s1')
@@ -209,6 +209,20 @@ class Hubcap::TestGroup < Test::Unit::TestCase
     assert_raises(Hubcap::InvalidParamKeyType) {
       hub = Hubcap.hub { server('test') { param(1 => 'x') } }
     }
+
+    # deep merge hashes
+    hub = Hubcap.hub {
+      param(:foo => {
+        :bar => { :garply => 'grok' },
+        :baz => 'log'
+      })
+      server('test') {
+        param(:foo => { :bar => { :garply => 'grault' } })
+      }
+    }
+
+    assert_equal('grault', hub.servers.first.params['foo']['bar']['garply'])
+    assert_equal('log', hub.servers.first.params['foo']['baz'])
   end
 
 end

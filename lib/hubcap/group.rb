@@ -241,7 +241,23 @@ class Hubcap::Group
 
 
   def params
-    @parent ? @parent.params.merge(@params) : @params
+    @parent ? deep_merge(@parent.params, @params) : @params
+  end
+
+
+  def deep_merge(merge_hash, other_hash)
+    merge_hash.dup.tap { |to_hash|
+
+      other_hash.each_pair { |k,v|
+        to_value = to_hash[k]
+        if to_value.is_a?(Hash) && v.is_a?(Hash)
+          to_hash[k] = deep_merge(to_value, v)
+        else
+          to_hash[k] = v
+        end
+      }
+
+    }
   end
 
 
